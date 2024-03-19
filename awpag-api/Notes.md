@@ -40,3 +40,47 @@ passo na construção de uma API REST completa. Nos próximos passos, podemos ex
 operações como adição, atualização e exclusão de clientes, bem como melhorar a representação dos recursos retornados.
 O JSON é amplamente utilizado para representar recursos em APIs REST devido à sua simplicidade e interoperabilidade, 
 mas outras opções, como XML, também são viáveis dependendo dos requisitos do projeto.      
+
+
+# Métodos HTTP e Códigos de Status: Entendendo a Comunicação na Web
+## Introdução
+- A comunicação na web é regida por protocolos e convenções bem definidas. Entre essas convenções, os métodos HTTP e 
+  os códigos de status desempenham papéis fundamentais. Neste artigo, exploraremos detalhadamente os métodos HTTP, 
+  também conhecidos como verbos HTTP, e os códigos de status associados a esses métodos.   
+
+## Métodos HTTP: Conceitos Fundamentais
+- Os métodos HTTP definem a semântica das operações a serem realizadas sobre um recurso específico. Eles indicam ao 
+  servidor qual ação deve ser executada no recurso identificado pela URI. Vamos analisar alguns dos principais 
+  métodos:    
+- - GET: Utilizado para obter a representação de um recurso. Este método não modifica o recurso, sendo considerado 
+    idempotente. 
+- - POST: Utilizado para enviar dados para serem processados por um recurso específico. Diferentemente do GET, o 
+    POST pode causar efeitos colaterais. 
+- - Outros métodos: Existem diversos outros métodos HTTP, cada um com sua própria finalidade, como PUT, DELETE, 
+    PATCH, entre outros. 
+
+## Idempotência e Efeitos Colaterais
+- Um aspecto importante dos métodos HTTP é a idempotência. Um método é considerado idempotente quando requisições 
+  repetidas não geram efeitos colaterais. Por exemplo, o método GET é idempotente, pois apenas recupera informações 
+  sem modificar o recurso.  
+
+## Códigos de Status HTTP: Entendendo as Respostas do Servidor
+- Os códigos de status HTTP são retornados pelo servidor para indicar o resultado de uma requisição. Alguns dos 
+  principais códigos incluem: 
+- - 200 (OK): Indica que a requisição foi bem-sucedida e o servidor retornou os dados solicitados.
+- - 201 (Created): Indica que a requisição foi bem-sucedida e resultou na criação de um novo recurso.
+- - 204 (No Content): Indica que a requisição foi bem-sucedida, mas o servidor não retornou nenhum conteúdo no corpo 
+    da resposta. 
+
+## Utilizando Códigos de Status Corretamente
+- É essencial utilizar os códigos de status HTTP corretamente para garantir uma comunicação eficaz entre cliente e 
+servidor. Os códigos de status são agrupados em níveis, como: 
+- - Nível 200: Indica sucesso na requisição. 
+- - Nível 300: Indica redirecionamento.
+- - Nível 400: Indica erros por parte do cliente.
+- - Nível 500: Indica erros no servidor.
+
+## Conclusão 
+- Compreender os métodos HTTP e os códigos de status é fundamental para o desenvolvimento de aplicações web robustas 
+  e eficientes. Ao utilizar esses conceitos de forma adequada, é possível garantir uma comunicação confiável entre 
+  cliente e servidor, proporcionando uma melhor experiência para os usuários finais.   
