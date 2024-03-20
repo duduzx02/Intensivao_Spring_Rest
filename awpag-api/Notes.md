@@ -84,3 +84,44 @@ servidor. Os códigos de status são agrupados em níveis, como:
 - Compreender os métodos HTTP e os códigos de status é fundamental para o desenvolvimento de aplicações web robustas 
   e eficientes. Ao utilizar esses conceitos de forma adequada, é possível garantir uma comunicação confiável entre 
   cliente e servidor, proporcionando uma melhor experiência para os usuários finais.   
+
+
+# Negociação de Conteúdo em APIs REST: Personalizando Formatos de Resposta
+# Introdução
+- Quando lidamos com requisições GET em APIs REST, geralmente recebemos recursos de coleção com representação em 
+  formato JSON. No entanto, é possível ter várias representações para o mesmo recurso, permitindo que ele seja 
+  visualizado de diferentes formas pelo consumidor da API.   
+
+## Especificando Formatos de Resposta
+- Ao fazer uma requisição, o consumidor da API pode especificar o formato que deseja receber como resposta. Isso é 
+  feito através do cabeçalho Accept na requisição HTTP, onde é possível indicar o tipo de mídia desejado. Por padrão,
+  se nenhum formato for especificado, o servidor retornará JSON. No entanto, é possível especificar outros formatos, 
+  como XML.   
+- - Adicionando cabeçalho Accept no Postman 
+- - Especificando formatos como JSON ou XML
+
+## Adicionando Suporte a Novos Formatos
+- Para adicionar suporte a novos formatos, como XML, na aplicação, é necessário configurar as dependências corretas. 
+  No exemplo dado, é utilizado o Jackson, uma biblioteca para serialização e desserialização de objetos, para lidar 
+  com XML.       
+- - Adicionando dependências no arquivo pom.xml
+- - Configurando o projeto para suportar XML
+
+## Melhorando a Produtividade com Dev Tools
+- As ferramentas de desenvolvimento, como o Spring Boot Dev Tools, podem aumentar a produtividade ao permitir que as 
+  alterações no código sejam refletidas automaticamente, sem a necessidade de reiniciar toda a aplicação.       
+- - Adicionando dependência do Spring Boot Dev Tools
+- - Utilizando o recurso de restart automático da aplicação
+
+## Próximos Passos
+- Com os fundamentos de APIs REST estabelecidos, é possível avançar para conceitos mais avançados, como persistência 
+  de dados, validação, tratamento de exceções e boas práticas de design e desenvolvimento. Esses tópicos serão 
+  abordados nas próximas aulas.  
+
+## Conclusão
+- A negociação de conteúdo em APIs REST permite personalizar os formatos de resposta de acordo com as necessidades 
+  do consumidor da API. Ao entender como especificar e adicionar suporte a diferentes formatos, é possível criar 
+  APIs mais flexíveis e adaptáveis. Além disso, ferramentas como o Spring Boot Dev Tools podem aumentar a 
+  produtividade do desenvolvedor durante o ciclo de desenvolvimento. É importante continuar aprendendo e 
+  compartilhando conhecimento para se tornar um desenvolvedor de APIs REST bem-sucedido.      
+- 
