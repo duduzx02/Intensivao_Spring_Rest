@@ -165,3 +165,5 @@ servidor. Os códigos de status são agrupados em níveis, como:
 - Por fim, é importante ressaltar a importância de seguir boas práticas de desenvolvimento e design de banco de dados, 
 garantindo a integridade, segurança e desempenho do sistema como um todo. Com as ferramentas e técnicas adequadas, 
 podemos criar APIs REST poderosas e confiáveis que atendam às necessidades de nossos usuários e clientes.    
+
+
