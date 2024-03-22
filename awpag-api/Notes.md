@@ -529,4 +529,127 @@ public class NegocioException extends RuntimeException {
 }
 ````
 
+# Implementação do Cadastro e Consulta de Parcelamentos
+## Criação da Tabela no Banco de Dados
+- Para armazenar os parcelamentos, precisamos criar a tabela respectiva no banco de dados. O código DDL para criar a 
+  tabela é: 
+````sql
+CREATE TABLE parcelamentos (
+        id INT NOT NULL AUTO_INCREMENT,
+        cliente_id INT NOT NULL,
+        descricao VARCHAR(20) NOT NULL,
+        valor_total DECIMAL(10,2) NOT NULL,
+        quantidade_parcelas INT NOT NULL,
+        data_criacao DATETIME NOT NULL,
+        PRIMARY KEY (id),
+        FOREIGN KEY (cliente_id) REFERENCES clientes (id)
+        );
+````
+
+## Entidade Parcelamento e Mapeamento Objeto-Relacional
+- Criamos a classe de entidade Parcelamento e as anotações para mapear os atributos da classe para as colunas da 
+  tabela: 
+
+````Java
+import javax.persistence.*;
+
+@Entity
+public class Parcelamento {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = 'cliente_id')
+    private Cliente cliente;
+
+    private String descricao;
+
+    private BigDecimal valorTotal;
+
+    private Integer quantidadeParcelas;
+
+    private LocalDateTime dataCriacao;
+}
+````
+## Repositório Parcelamento
+- Criamos o repositório ParcelamentoRepository com os métodos padrão do Spring Data JPA:
+````Java
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ParcelamentoRepository extends JpaRepository<Parcelamento, Long> {
+} 
+````
+
+## Controladora Parcelamento
+- A controladora ParcelamentoController contém os endpoints para listar e buscar parcelamentos:
+````Java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping('/parcelamentos')
+public class ParcelamentoController {
+
+  @Autowired
+  private ParcelamentoRepository parcelamentoRepository;
+
+  @GetMapping
+  public List<Parcelamento> listar() {
+    return parcelamentoRepository.findAll();
+  }
+
+  @GetMapping('/{id}')
+  public ResponseEntity<Parcelamento> buscar(@PathVariable Long id) {
+    return parcelamentoRepository.findById(id)
+            .map(parcelamento - > ResponseEntity.ok(parcelamento))
+            .orElse(ResponseEntity.notFound().build());
+  }
+} 
+````
+## Serviço Parcelamento
+- A classe de serviço ParcelamentoService inclui o método para cadastrar um parcelamento:
+````Java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class ParcelamentoService {
+
+    @Autowired
+    private ParcelamentoRepository parcelamentoRepository;
+
+    @Transactional
+    public Parcelamento cadastrarNovoParcelamento(Parcelamento parcelamento) {
+        parcelamento.setDataCriacao(LocalDateTime.now());
+        return parcelamentoRepository.save(parcelamento);
+    }
+}
+````
+## Implementação do Cadastro
+- Na controladora ParcelamentoController, o método cadastrar recebe um Parcelamento e delega a persistência para o 
+  serviço ParcelamentoService: 
+
+````Java
+@PostMapping
+public ResponseEntity<Parcelamento> cadastrar(@RequestBody Parcelamento parcelamento) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(parcelamentoService.cadastrarNovoParcelamento(parcelamento));
+}
+````
+
+## Tratamento de Erros
+- Para tratar o erro de cadastro de parcelamento com um cliente inexistente, adicionamos a anotação @ResponseStatus 
+  no método cadastrarNovoParcelamento do serviço ParcelamentoService:  
+````Java
+@Transactional
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public Parcelamento cadastrarNovoParcelamento(Parcelamento parcelamento) {
+    parcelamento.setDataCriacao(LocalDateTime.now());
+    return parcelamentoRepository.save(parcelamento);
+}
+````
+
+
 
