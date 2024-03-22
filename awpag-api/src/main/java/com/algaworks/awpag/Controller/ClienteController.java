@@ -2,6 +2,7 @@ package com.algaworks.awpag.Controller;
 
 import com.algaworks.awpag.model.Cliente;
 import com.algaworks.awpag.repository.ClienteRepository;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,12 +37,12 @@ public class ClienteController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Cliente adicionar(@RequestBody Cliente cliente){
+    public Cliente adicionar(@Valid @RequestBody Cliente cliente){
         return clienteRepository.save(cliente);
     }
 
     @PutMapping("/{clienteId}")
-    public ResponseEntity<Cliente> atualizar(@PathVariable Long clienteId, @RequestBody Cliente cliente){
+    public ResponseEntity<Cliente> atualizar(@Valid @PathVariable Long clienteId, @RequestBody Cliente cliente){
         if(!clienteRepository.existsById(clienteId)){
             return ResponseEntity.notFound().build();
         }

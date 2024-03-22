@@ -366,4 +366,61 @@ public ResponseEntity<Void> excluir(@PathVariable Long clienteId) {
 }
 ````
 
+# Validações de Objetos Java com Jacarta Bean Validation
+## Introdução
+- Ao criar APIs REST com Spring Boot, é importante validar os dados recebidos para garantir sua integridade e evitar 
+  erros. O Jacarta Bean Validation é uma especificação que oferece recursos para validação de objetos Java
+
+## Adicionando a Dependência do Validation
+- Para utilizar o Jacarta Bean Validation, adicione a dependência 'spring-boot-starter-validation' ao seu projeto 
+  Maven: 
+````markdown
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
+````
+
+- Isso adicionará a implementação Hibernate Validator, que atende à especificação Jacarta Bean Validation.
+
+## Anotações de Validação
+- Para validar propriedades de um objeto Java, use anotações do Jacarta Bean Validation:
+
+- - @NotNull: Verifica se a propriedade não é nula.
+- - @NotBlank: Verifica se a propriedade não é nula, vazia ou contém apenas espaços em branco.
+- - @Size: Limita o tamanho da propriedade (máximo ou mínimo).
+- - @Email: Verifica se a propriedade está no formato de e-mail.
+
+## Aplicando Validações em Controllers
+
+- Para aplicar validações aos dados recebidos em um método do controlador, use a anotação @Valid no parâmetro do 
+  objeto a ser validado:  
+````markdown
+
+@PostMapping('/clientes')
+public ResponseEntity<?> criarCliente(@Valid @RequestBody Cliente cliente) {
+    // ...
+}
+````
+
+## Erros de Validação
+- Se a validação falhar, o Spring Boot retornará um código de status HTTP 400 (Bad Request) e uma mensagem de erro 
+  que indica os campos inválidos.
+
+## Personalizando Mensagens de Erro
+- As mensagens de erro padrão podem ser customizadas usando a anotação @MessageCodes:
+````markdown
+
+@NotBlank(message = 'O nome do cliente é obrigatório.')
+private String nome;
+````
+
+## Conclusão
+- O Jacarta Bean Validation oferece uma maneira poderosa e fácil de validar dados de objetos Java em APIs REST. Ao 
+  usar as anotações de validação e aplicá-las adequadamente em seus controllers, você pode garantir a integridade 
+  dos dados recebidos e melhorar a experiência do usuário.   
+- 
+
+
 
