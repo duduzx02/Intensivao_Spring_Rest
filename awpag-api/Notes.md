@@ -422,5 +422,111 @@ private String nome;
   dos dados recebidos e melhorar a experiência do usuário.   
 - 
 
+# Como Organizar as Regras de Negócio em Java com Spring Framework
+## Introdução
+- À medida que um projeto cresce, é comum que as regras de negócio sejam espalhadas pelo controlador, o que pode 
+dificultar a manutenção e levar a um código 'espaguete'. Para evitar isso, é crucial organizar as regras de negócio 
+em classes com responsabilidades bem definidas. 
+
+## Opções para Organizar as Regras de Negócio
+- Existem duas principais abordagens para organizar as regras de negócio:
+
+### Classes de Entidade
+- Nessa abordagem, as regras de negócio são colocadas dentro das classes de entidade. No entanto, isso pode resultar 
+em classes com alta coesão, o que pode dificultar a manutenção.
+
+### Classes de Serviço de Domínio
+- Essa abordagem envolve a criação de classes separadas para representar regras de negócio. Essas classes são 
+chamadas de classes de serviço de domínio e podem conter regras que trabalham com várias entidades ou precisam 
+injetar objetos como repositórios. 
+
+## Criação de Classes de Serviço de Domínio
+- Para criar uma classe de serviço de domínio, siga estes passos:
+- - Crie um pacote dentro do pacote de domínio chamado 'service'.
+- - Crie uma classe dentro do pacote de serviço, como CadastroClienteService.
+- - Anote a classe com a anotação @Service do Spring Framework.
+
+## Chamando Classes de Serviço de Domínio no Controlador
+- Para usar classes de serviço de domínio no controlador, siga estes passos:
+- - Declare uma variável de instância para a classe de serviço, como cadastroClienteService.
+- - No construtor do controlador, injete a classe de serviço e o repositório correspondente.
+- - Nos métodos do controlador, chame os métodos da classe de serviço em vez do repositório diretamente.
+
+## Adicionando Regras de Negócio
+- Para adicionar uma regra de negócio, como impedir o cadastro de clientes com e-mails duplicados:
+- - No método da classe de serviço responsável pela operação, verifique se existe algum cliente com o e-mail 
+    informado usando o repositório. 
+- - Se um cliente com o e-mail informado já existir, lance uma exceção customizada, como NegocioException. 
+- - No método do controlador que chama o serviço, capture a NegocioException e retorne uma resposta HTTP adequada, 
+    como um erro 400 (Bad Request) com uma mensagem de erro amigável. 
+
+## Exemplo:
+
+````Java
+// Classe de Serviço de Domínio
+@Service
+public class CadastroClienteService {
+
+    private final ClientRepository clientRepository;
+
+    public CadastroClienteService(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
+
+    @Transactional
+    public Cliente salvar(Cliente cliente) {
+        if (clientRepository.findByEmail(cliente.getEmail()).isPresent()) {
+            throw new NegocioException('Já existe um cliente cadastrado com este e-mail.');
+        }
+
+        return clientRepository.save(cliente);
+    }
+
+    public void excluir(Long clienteId) {
+        clientRepository.deleteById(clienteId);
+    }
+}
+
+````
+
+````Java
+// Controlador
+@RestController
+public class ClienteController {
+
+    private final CadastroClienteService cadastroClienteService;
+    private final ClientRepository clientRepository;
+
+    public ClienteController(CadastroClienteService cadastroClienteService, ClientRepository clientRepository) {
+        this.cadastroClienteService = cadastroClienteService;
+        this.clientRepository = clientRepository;
+    }
+
+    @PostMapping('/clientes')
+    public ResponseEntity<String> adicionar(@RequestBody Cliente cliente) {
+        try {
+            cadastroClienteService.salvar(cliente);
+        } catch (NegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping('/clientes')
+    public List<Cliente> listar() {
+        return clientRepository.findAll();
+    }
+}
+````
+````Java
+// Exceção Customizada
+public class NegocioException extends RuntimeException {
+
+    public NegocioException(String message) {
+        super(message);
+    }
+}
+````
 
 
