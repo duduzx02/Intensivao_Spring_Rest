@@ -301,5 +301,69 @@ public interface ClienteRepository extends JPARepository<Cliente, Long> {
   separando as responsabilidades e automatizando a implementação de métodos comuns. Eles são uma ferramenta 
   essencial para o desenvolvimento de aplicações Java robustas e escaláveis.   
 
+# Implementação de Endpoints para Gerenciamento de Clientes
+## Introdução
+- Nesta seção, implementaremos novos endpoints para trabalhar com o recurso de clientes. Já implementamos o endpoint 
+  para listar clientes e agora abordaremos a busca de um cliente específico e o cadastro, atualização e exclusão de 
+  clientes.   
+
+## Buscar Cliente
+- Para buscar um cliente específico, criamos um método buscar no controlador ClienteController. Este método recebe o 
+  ID do cliente como argumento e retorna um ResponseEntiy do tipo Cliente. O código do método é o seguinte:   
+````
+@GetMapping('/clientes/{clienteId}')
+public ResponseEntity<Cliente> buscar(@PathVariable Long clienteId) {
+        Optional<Cliente> cliente = clienteRepository.findById(clienteId);
+        if (cliente.isPresent()) {
+        return ResponseEntity.ok(cliente.get());
+        } else {
+        return ResponseEntity.notFound().build();
+        }
+        }
+````
+
+## Cadastrar Cliente
+- Para cadastrar um novo cliente, criamos um método adicionar no controlador ClienteController. Este método recebe um 
+objeto Cliente no corpo da requisição e retorna o cliente salvo como um ResponseEntity. O código do método é o 
+seguinte:   
+
+````
+@PostMapping('/clientes')
+public ResponseEntity<Cliente> adicionar(@RequestBody Cliente cliente) {
+    Cliente clienteSalvo = clienteRepository.save(cliente);
+    return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
+}
+
+````
+
+## Atualizar Cliente
+- Para atualizar um cliente, criamos um método atualizar no controlador ClienteController. Este método recebe o ID 
+  do cliente na URL e o objeto Cliente atualizado no corpo da requisição. O código do método é o seguinte:    
+
+````
+@PutMapping('/clientes/{clienteId}')
+public ResponseEntity<Cliente> atualizar(@PathVariable Long clienteId, @RequestBody Cliente cliente) {
+    if (!clienteRepository.existsById(clienteId)) {
+        return ResponseEntity.notFound().build();
+    }
+    cliente.setId(clienteId);
+    Cliente clienteAtualizado = clienteRepository.save(cliente);
+    return ResponseEntity.ok(clienteAtualizado);
+}
+````
+## Excluir Cliente
+- Por fim, para excluir um cliente, criamos um método excluir no controlador ClienteController. Este método recebe o 
+  ID do cliente na URL e retorna um ResponseEntity do tipo Void. O código do método é o seguinte:   
+
+````
+@DeleteMapping('/clientes/{clienteId}')
+public ResponseEntity<Void> excluir(@PathVariable Long clienteId) {
+    if (!clienteRepository.existsById(clienteId)) {
+        return ResponseEntity.notFound().build();
+    }
+    clienteRepository.deleteById(clienteId);
+    return ResponseEntity.noContent().build();
+}
+````
 
 
