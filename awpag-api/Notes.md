@@ -219,3 +219,87 @@ podemos criar APIs REST poderosas e confiáveis que atendam às necessidades de 
   desejam simplificar o desenvolvimento de aplicações Java empresariais, tornando o processo de persistência de 
   dados mais eficiente e menos propenso a erros.  
 
+# Repositórios com Spring Data JPA
+## O Problema do Código Spaghetti
+- Em aplicações pequenas ou protótipos, pode ser aceitável implementar operações de persistência diretamente no 
+  Controller. No entanto, em aplicações maiores, isso pode levar a um código confuso e difícil de manter, conhecido 
+  como 'código spaghetti'.    
+
+## Separação de Responsabilidades
+- Para evitar esse problema, é recomendado separar as responsabilidades. Um componente dedicado será responsável pelo 
+acesso aos dados, enquanto o Controller usará esse componente para executar operações de persistência.    
+
+## Repositórios com Spring Data JPA
+- O Spring Data JPA é uma biblioteca que facilita a criação de repositórios com Jakarta Persistence. Ele fornece uma 
+  interface genérica (JPARepository) que traz várias funcionalidades pré-definidas para trabalhar com entidades e 
+  persistência de dados.   
+
+## Criando um Repositório
+- Para criar um repositório, basta estender a interface JPARepository com a entidade que será gerenciada e seu tipo 
+  de identificador. Isso adiciona automaticamente vários métodos comuns para consultar e gerenciar a entidade.   
+
+````java
+public interface ClienteRepository extends JPARepository<Cliente, Long> {
+}
+````
+## Anotação @Repository
+- A anotação @Repository do Spring Framework é usada para marcar o repositório como um componente do Spring, 
+  indicando sua responsabilidade de persistência de dados.   
+
+````java
+@Repository
+public interface ClienteRepository extends JPARepository<Cliente, Long> {
+}
+````
+
+## Injeção de Dependência
+- O Spring gerencia instâncias do repositório, permitindo que elas sejam injetadas em outros objetos usando injeção 
+  de dependência. 
+
+````java
+public class ClienteController {
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    // ...
+}
+````
+
+## Métodos Customizados
+- Além dos métodos pré-definidos, é possível definir métodos customizados no repositório seguindo uma convenção de 
+  nomenclatura. Por exemplo, findByNome criará um método que busca clientes por nome.   
+
+````java
+public interface ClienteRepository extends JPARepository<Cliente, Long> {
+
+    List<Cliente> findByNome(String nome);
+
+}
+````
+
+## Implementação Automática
+- O Spring Data JPA implementa automaticamente esses métodos em tempo de execução, dispensando a necessidade de 
+  criar classes de implementação. Essa implementação é baseada em JPQL e SQL.   
+
+## Consultas Exatas e Não Exatas
+- Consultas exatas usam o operador = para comparar valores. Consultas não exatas podem usar palavras-chave como 
+  containing para buscar valores que contêm uma determinada substring.   
+
+````java
+public interface ClienteRepository extends JPARepository<Cliente, Long> {
+
+    List<Cliente> findByNome(String nome);
+
+    List<Cliente> findByNomeContaining(String nome);
+
+}
+````
+
+## Resumo
+- Os repositórios com Spring Data JPA fornecem uma maneira fácil e flexível de gerenciar a persistência de dados, 
+  separando as responsabilidades e automatizando a implementação de métodos comuns. Eles são uma ferramenta 
+  essencial para o desenvolvimento de aplicações Java robustas e escaláveis.   
+
+
+
