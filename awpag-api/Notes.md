@@ -651,5 +651,15 @@ public Parcelamento cadastrarNovoParcelamento(Parcelamento parcelamento) {
 }
 ````
 
+# Validação em APIs REST com Java e Spring Rest
+## Introdução
+- Esta aula aborda técnicas e boas práticas para aprimorar a profissionalização das APIs REST desenvolvidas com 
+  Spring Rest. É essencial para se diferenciar de outros programadores que ainda não dominam esses conhecimentos.    
+
+## Validação em Cascata com Jacarta Bean Validation
+- Para validar objetos Java em cascata, podemos utilizar o Jacarta Bean Validation. Ao definir restrições nas 
+  propriedades das classes, como @Max, @NotNull, @NotBlank e @Size, podemos garantir dados válidos.  
+- 
+
 
 
