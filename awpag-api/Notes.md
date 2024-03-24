@@ -661,5 +661,33 @@ public Parcelamento cadastrarNovoParcelamento(Parcelamento parcelamento) {
   propriedades das classes, como @Max, @NotNull, @NotBlank e @Size, podemos garantir dados válidos.  
 - 
 
+#  Boas práticas para Exception Handler
+## Introdução
+- O problema abordado é a necessidade de um componente Spring para capturar exceções globais em uma aplicação. Isso 
+  evitaria a duplicação de códigos de tratamento de exceções em cada controlador.   
+
+## Criação do Componente ExceptionHandler
+- O componente apiExceptionHandler é criado no pacote api.exceptionhandler para capturar exceções em toda a 
+  aplicação. A anotação @RestControllerAdvice é usada para torná-lo um componente Spring com a capacidade de tratar 
+  exceções.   
+
+## Melhoria das Respostas de Erro
+- O formato de resposta de erro é melhorado usando a especificação RFC 7807, que padroniza a representação de 
+  informações de erro em respostas HTTP. O objeto problemDetails do Spring MVC é usado para retornar mensagens de 
+  erro no formato RFC.   
+
+## Customização das Mensagens de Erro
+- O método handleMethodArgumentNotValidException é sobrescrito para personalizar as mensagens de erro para exceções 
+  de validação. Um campo 'Fields' é adicionado ao objeto problemDetails para fornecer informações específicas sobre 
+  os campos inválidos.    
+
+## Integração com Internacionalização
+- As mensagens de erro são internacionalizadas usando códigos de erro. Esses códigos podem ser usados para 
+  customizar as mensagens de erro para diferentes idiomas. 
+
+## Conclusão
+- O uso de um componente Spring para tratar exceções globais e a implementação da especificação RFC 7807 melhoram a 
+  qualidade e a consistência das mensagens de erro na aplicação. Isso facilita o trabalho dos consumidores da API, 
+  pois eles podem identificar e resolver problemas com mais facilidade.    
 
 
