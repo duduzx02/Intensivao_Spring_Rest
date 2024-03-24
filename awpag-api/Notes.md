@@ -690,4 +690,9 @@ public Parcelamento cadastrarNovoParcelamento(Parcelamento parcelamento) {
   qualidade e a consistência das mensagens de erro na aplicação. Isso facilita o trabalho dos consumidores da API, 
   pois eles podem identificar e resolver problemas com mais facilidade.    
 
+# Implementando Offset no Spring
+- Para armazenar datas e horas com offset no Spring, use o tipo OffsetDateTime em vez de LocalDateTime. O 
+  OffsetDateTime armazena a data e hora junto com o offset, garantindo que a informação seja sempre clara e 
+  facilmente convertível.  
+- 
 
