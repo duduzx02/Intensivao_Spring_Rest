@@ -1,10 +1,9 @@
-package com.algaworks.awpag.exceptionhandler;
+package com.algaworks.awpag.api.exceptionhandler;
 
-import com.algaworks.awpag.exception.NegocioException;
+import com.algaworks.awpag.domain.exception.NegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.*;
 import org.springframework.validation.FieldError;

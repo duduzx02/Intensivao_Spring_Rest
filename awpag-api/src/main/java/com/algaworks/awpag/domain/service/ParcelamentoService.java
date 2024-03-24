@@ -1,15 +1,13 @@
-package com.algaworks.awpag.service;
+package com.algaworks.awpag.domain.service;
 
-import com.algaworks.awpag.exception.NegocioException;
-import com.algaworks.awpag.model.Cliente;
-import com.algaworks.awpag.model.Parcelamento;
-import com.algaworks.awpag.repository.ClienteRepository;
-import com.algaworks.awpag.repository.ParcelamentoRepository;
+import com.algaworks.awpag.domain.exception.NegocioException;
+import com.algaworks.awpag.domain.model.Cliente;
+import com.algaworks.awpag.domain.model.Parcelamento;
+import com.algaworks.awpag.domain.repository.ParcelamentoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @AllArgsConstructor

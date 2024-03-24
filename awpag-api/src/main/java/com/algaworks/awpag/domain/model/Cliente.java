@@ -1,13 +1,12 @@
-package com.algaworks.awpag.model;
+package com.algaworks.awpag.domain.model;
 
 
-import com.algaworks.awpag.validation.ValidationGroups;
+import com.algaworks.awpag.domain.validation.ValidationGroups;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import jakarta.validation.groups.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

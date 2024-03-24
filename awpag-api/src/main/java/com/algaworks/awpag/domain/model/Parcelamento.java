@@ -1,6 +1,6 @@
-package com.algaworks.awpag.model;
+package com.algaworks.awpag.domain.model;
 
-import com.algaworks.awpag.validation.ValidationGroups;
+import com.algaworks.awpag.domain.validation.ValidationGroups;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -10,7 +10,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Entity

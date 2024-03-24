@@ -694,5 +694,49 @@ public Parcelamento cadastrarNovoParcelamento(Parcelamento parcelamento) {
 - Para armazenar datas e horas com offset no Spring, use o tipo OffsetDateTime em vez de LocalDateTime. O 
   OffsetDateTime armazena a data e hora junto com o offset, garantindo que a informação seja sempre clara e 
   facilmente convertível.  
+
+# Separação do Modelo de Domínio e Modelo de Representação de Recursos
+## Introdução
+- O modelo de domínio representa as entidades e regras de negócio do sistema, enquanto o modelo de representação de 
+  recursos define como os recursos do sistema são expostos na API. Compartilhar o mesmo modelo para ambas as funções 
+  pode levar a problemas, como:   
+- - Exposição de propriedades sensíveis na API
+- - Alterações no modelo de domínio afetando inadvertidamente a API
+- - Conflitos ao representar recursos de forma diferente do modelo de domínio
+
+## Modelo de Transferência de Dados (DTO)
+- Para evitar esses problemas, é recomendado o uso de DTOs, que são classes usadas exclusivamente para transferir 
+  dados entre diferentes camadas do sistema. Os DTOs possuem as seguintes características:   
+- - Contêm apenas as propriedades necessárias para representação
+- - Não possuem comportamentos
+- - Permitem personalizar a representação dos recursos
+
+## Criando DTOs
+- Para criar DTOs, é necessário:
+
+- - Criar um pacote para os modelos de representação
+- - Dentro do pacote, criar uma classe para cada DTO
+- - Definir as propriedades do DTO com os nomes e tipos desejados
+
+## Conversão de Entidades para DTOs
+- Para converter entidades de domínio em DTOs, é possível utilizar o método map() do Java:
+````java
+ParcelamentoModel parcelamentoModel = new ParcelamentoModel()
+        .setId(parcelamento.getId())
+        .setNomeCliente(parcelamento.getCliente().getNome()); 
+````
+
+## Atualização dos Controladores
+- Nos controladores, é necessário retornar os DTOs em vez das entidades:
+````Java
+@GetMapping('/parcelamentos/{id}')
+public ResponseEntity<ParcelamentoModel> buscar(@PathVariable Long id) {
+    Optional<Parcelamento> parcelamento = parcelamentoRepository.findById(id);
+    return parcelamento.map(p - > new ParcelamentoModel(p)).orElse(ResponseEntity.notFound().build());
+}
+ ````
+## Conclusão
+- Separar o modelo de domínio do modelo de representação de recursos permite maior flexibilidade e proteção, 
+  evitando alterações indesejadas na API e exposição de dados sensíveis.  
 - 
 

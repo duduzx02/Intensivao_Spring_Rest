@@ -1,9 +1,8 @@
-package com.algaworks.awpag.Controller;
+package com.algaworks.awpag.api.Controller;
 
-import com.algaworks.awpag.exception.NegocioException;
-import com.algaworks.awpag.model.Cliente;
-import com.algaworks.awpag.repository.ClienteRepository;
-import com.algaworks.awpag.service.CadastroClienteService;
+import com.algaworks.awpag.domain.model.Cliente;
+import com.algaworks.awpag.domain.repository.ClienteRepository;
+import com.algaworks.awpag.domain.service.CadastroClienteService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
