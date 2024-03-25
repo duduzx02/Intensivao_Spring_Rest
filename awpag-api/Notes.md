@@ -738,5 +738,83 @@ public ResponseEntity<ParcelamentoModel> buscar(@PathVariable Long id) {
 ## Conclusão
 - Separar o modelo de domínio do modelo de representação de recursos permite maior flexibilidade e proteção, 
   evitando alterações indesejadas na API e exposição de dados sensíveis.  
-- 
+
+# Melhorando a Gerenciabilidade do Código com Mapeamento de Objetos usando Model Mapper
+## Introdução
+- O código boilerplate é aquele código repetitivo que não agrega muito valor ao negócio da aplicação, mas ainda 
+  precisa ser implementado. Isso dificulta a manutenção do código. 
+- No método buscar do controlador parcelamento, temos código boilerplate para transformar objetos da entidade 
+  parcelamento em objetos do parcelamentoModel (modelo de representação do recurso).   
+
+## Usando o Model Mapper
+- Para evitar escrever código boilerplate, vamos usar o Model Mapper.
+### Adicionando a Dependência
+- Vamos adicionar a dependência do Model Mapper ao pom.xml:
+````xml
+<dependency>
+  <groupId>org.modelmapper</groupId>
+  <artifactId>modelmapper</artifactId>
+  <version>3.0.0</version>
+</dependency>
+````
+
+## Refatorando o Código
+- Vamos refatorar o código para usar o Model Mapper:
+````Java
+@RestController
+@RequestMapping('parcelamentos')
+public class ParcelamentoController {
+  @Autowired
+  private ParcelamentoRepository parcelamentoRepository;
+  @Autowired
+  private ParcelamentoService parcelamentoService;
+
+  @PostMapping
+  public ParcelamentoModel cadastrar(@RequestBody Parcelamento parcelamento) {
+    Parcelamento cadastrado = parcelamentoService.cadastrar(parcelamento);
+    return parcelamentoAssembler.toModel(cadastrado);
+  }
+
+  @GetMapping('{id}')
+  public ResponseEntity<ParcelamentoModel> buscar(@PathVariable Long id) {
+    return ResponseEntity.ok(parcelamentoAssembler.toModel(parcelamentoRepository.findById(id)));
+  }
+
+  @GetMapping
+  public List<ParcelamentoModel> listar() {
+    return parcelamentoAssembler.toCollectionModel(parcelamentoRepository.findAll());
+  }
+}
+````
+
+## Criando o Assembler
+- Vamos criar um assembler para abstrair a responsabilidade de transformação:
+````Java
+-@Component
+public class ParcelamentoAssembler {
+  @Autowired
+  private ModelMapper modelMapper;
+
+  public ParcelamentoModel toModel(Parcelamento parcelamento) {
+    return modelMapper.map(parcelamento, ParcelamentoModel.class);
+  }
+
+  public List<ParcelamentoModel> toCollectionModel(List<Parcelamento> parcelamentos) {
+    return parcelamentos.stream()
+        .map(this::toModel)
+        .toList();
+  }
+}
+````
+## Como funciona o Model Mapper
+- O Model Mapper usa estratégias de correspondência de propriedades para atribuir propriedades de um objeto a outro, 
+  mesmo que os nomes das propriedades sejam diferentes. 
+
+- Por exemplo, no ParcelamentoModel, temos o atributo 'nomeCliente', enquanto na entidade Parcelamento, temos um 
+objeto 'cliente' com o atributo 'nome'. O Model Mapper consegue atribuir o nome do cliente corretamente.     
+
+## Conclusão
+- Usando o Model Mapper e criando um assembler, reduzimos o código boilerplate, melhoramos a legibilidade do código 
+  e abstraímos a responsabilidade de transformação de objetos. 
+
 

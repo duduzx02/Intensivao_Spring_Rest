@@ -1,11 +1,13 @@
 package com.algaworks.awpag.api.Controller;
 
+import com.algaworks.awpag.api.assembler.ParcelamentoAssembler;
 import com.algaworks.awpag.api.model.ParcelamentoModel;
 import com.algaworks.awpag.domain.model.Parcelamento;
 import com.algaworks.awpag.domain.repository.ParcelamentoRepository;
 import com.algaworks.awpag.domain.service.ParcelamentoService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,34 +21,26 @@ public class ParcelamentoController {
 
     private final ParcelamentoRepository parcelamentoRepository;
     private final ParcelamentoService parcelamentoService;
+    private final ParcelamentoAssembler parcelamentoAssembler;
 
     @GetMapping
-    public List<Parcelamento> listar(){
-        return parcelamentoRepository.findAll();
+    public List<ParcelamentoModel> listar(){
+        return parcelamentoAssembler.toCollectionModel(parcelamentoRepository.findAll());
     }
 
     @GetMapping("/{parcelamentoId}")
     public ResponseEntity<ParcelamentoModel> buscar(@PathVariable Long parcelamentoId){
         return parcelamentoRepository.findById(parcelamentoId)
-                .map(parcelamento -> {
-                    var parcelamentoModel = new ParcelamentoModel();
-                    parcelamentoModel.setId(parcelamento.getId());
-                    parcelamentoModel.setNomeCliente(parcelamento.getCliente().getNome());
-                    parcelamentoModel.setDescricao(parcelamento.getDescricao());
-                    parcelamentoModel.setValorTotal(parcelamento.getValorTotal());
-                    parcelamentoModel.setParcelas(parcelamento.getQuantidadeParcelas());
-                    parcelamentoModel.setDataCriaçao(parcelamento.getDataCriacao());
-
-
-                    return ResponseEntity.ok(parcelamentoModel);
-                })
+                .map(parcelamentoAssembler::toModel)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Parcelamento cadastrar(@Valid @RequestBody Parcelamento parcelamento){
-        return parcelamentoService.cadastrar(parcelamento);
+    public ParcelamentoModel cadastrar(@Valid @RequestBody Parcelamento parcelamento){
+        Parcelamento parcelamentoCadastrado =  parcelamentoService.cadastrar(parcelamento);
+        return parcelamentoAssembler.toModel(parcelamentoCadastrado);
     }
 
 
